@@ -1,5 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface NoteCardProps {  
     note: {
@@ -14,12 +16,14 @@ export function NoteCard({note}:NoteCardProps){
             <Dialog.Trigger className="rounded-md flex flex-col gap-3 text-left relative overflow-hidden bg-slate-800 p-5 hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 outline-none">
                 
                 <span className="text-sm font-medium text-slate-300">
-                    {/* há {props.note.date.toISOString()} dias */}
-                    há 2 dias
+                    {formatDistanceToNow(note.date, {
+                        locale: ptBR,
+                        addSuffix: true,
+                    })}
                 </span>
 
                 <p className="text-sm leading-6 text-slate-400">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi deleniti corrupti nulla reprehenderit ullam maiores est excepturi labore accusantium sunt, atque vel blanditiis. Deleniti quam voluptates, necessitatibus tempore ipsum aspernatur.
+                    {note.content}
                 </p>
 
                 <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none"></div>
@@ -34,10 +38,13 @@ export function NoteCard({note}:NoteCardProps){
 
                     <div className="flex flex-1 flex-col gap-3 p-5">
                         <span className="text-sm font-medium text-slate-300">
-                            Há 2 dias
+                            {formatDistanceToNow(note.date, {
+                                locale: ptBR,
+                                addSuffix: true,
+                            })}
                         </span>
                         <p className="text-sm leading-6 text-slate-400">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam, modi deleniti molestias veritatis doloribus debitis eius laudantium eaque sit, tenetur porro praesentium, esse quae? Hic nemo temporibus harum accusamus cupiditate?
+                            {note.content}
                         </p>
                     </div>
                 </Dialog.Content>
