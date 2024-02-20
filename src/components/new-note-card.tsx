@@ -1,12 +1,18 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { useState } from "react";
+import {ChangeEvent,  useState } from "react";
 
 export function NewNoteCard(){
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
 
     function handleStartEditor() {
         setShouldShowOnboarding(false);
+    }
+
+    function handleContentChanged(event: ChangeEvent<HTMLTextAreaElement>) {
+        if (event.target.value === "") {
+          setShouldShowOnboarding(true);
+        }
     }
 
     return(
@@ -56,7 +62,11 @@ export function NewNoteCard(){
                             </p>
 
                         ):(
-                            <p>Editor</p>
+                            <textarea
+                                autoFocus
+                                className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
+                                onChange={handleContentChanged}
+                            />
                         )}
 
 
