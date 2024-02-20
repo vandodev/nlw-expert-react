@@ -1,18 +1,31 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import {ChangeEvent,  useState } from "react";
+import {ChangeEvent,  FormEvent,  useState } from "react";
 
 export function NewNoteCard(){
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
+    const [content, setContent] = useState("");
 
     function handleStartEditor() {
         setShouldShowOnboarding(false);
     }
 
     function handleContentChanged(event: ChangeEvent<HTMLTextAreaElement>) {
+        setContent(event.target.value);
         if (event.target.value === "") {
           setShouldShowOnboarding(true);
         }
+    }
+
+    function handleSaveNote(event: FormEvent) {
+        event.preventDefault();
+    
+        if (content === "") {
+          return;
+        }        
+    
+        setContent("");
+        setShouldShowOnboarding(true);    
     }
 
     return(
@@ -35,7 +48,7 @@ export function NewNoteCard(){
                 <X className="size-5" />
                 </Dialog.Close>
     
-                <form className="flex-1 flex flex-col">
+                <form onSubmit={handleSaveNote} className="flex-1 flex flex-col">
                     <div className="flex flex-1 flex-col gap-3 p-5">
                         <span className="text-sm font-medium text-slate-300">
                         Adicionar nota
@@ -73,7 +86,7 @@ export function NewNoteCard(){
                     </div>   
 
                     <button
-                        type="button"
+                        type="submit"
                         className="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
                     >
                         Salvar nota
