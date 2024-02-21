@@ -3,7 +3,11 @@ import { X } from "lucide-react";
 import {ChangeEvent,  FormEvent,  useState } from "react";
 import { toast } from "sonner";
 
-export function NewNoteCard(){
+interface NewNoteProps {
+    onNoteCreated: (content: string) => void;
+}
+
+export function NewNoteCard({onNoteCreated}: NewNoteProps){
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
     const [content, setContent] = useState("");
 
@@ -23,7 +27,9 @@ export function NewNoteCard(){
     
         if (content === "") {
           return;
-        }        
+        }
+        
+        onNoteCreated(content)
     
         setContent("");
         setShouldShowOnboarding(true);
