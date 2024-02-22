@@ -76,6 +76,14 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
         speechRecognition.start();
     }
 
+    function handleStopRecording() {
+        setIsRecording(false);
+    
+        if (speechRecognition !== null) {
+          speechRecognition.stop();
+        }        
+    }
+
     return(
         <Dialog.Root>
             <Dialog.Trigger className="rounded-md flex flex-col gap-3 text-left bg-slate-700 p-5 hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400 outline-none">
@@ -139,6 +147,7 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
                         <button
                             type="button"
                             className="w-full flex items-center justify-center gap-2 bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
+                            onClick={handleStopRecording}
                         >
                             <div className="size-3 rounded-full bg-red-500 animate-pulse" />
                             Gravando! (clique p/ interromper)
