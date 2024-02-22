@@ -3,6 +3,11 @@ import { X } from "lucide-react";
 import {ChangeEvent,  FormEvent,  useState } from "react";
 import { toast } from "sonner";
 
+const SpeechRecognitionAPI =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+const speechRecognition = new SpeechRecognitionAPI();
+
 interface NewNoteProps {
     onNoteCreated: (content: string) => void;
 }
@@ -38,9 +43,37 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
         toast.success("Nota criada com sucesso!");
     }
 
-    function handleStartRecording() {       
+    function handleStartRecording() {    
+      const isSpeechRecognitionAPIAvailable =
+        "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+  
+      if (!isSpeechRecognitionAPIAvailable) {
+        alert("Infelizmente seu navegador não suporta a API de gravação!");
+        return;
+      }
+
         setIsRecording(true);
         setShouldShowOnboarding(false);    
+
+        speechRecognition.lang = "pt-BR";
+        speechRecognition.continuous = true;
+        speechRecognition.maxAlternatives = 1;
+        speechRecognition.interimResults = true;
+
+      
+        speechRecognition.onresult = (event) => {
+            const transcription = Array.from(event.results).reduce((text, result) => {
+            return text.concat(result[0].transcript);
+            }, "");
+    
+                setContent(transcription);
+        };
+  
+        speechRecognition.onerror = (event) => {
+            console.error(event);
+        };
+    
+        speechRecognition.start();
     }
 
     return(
@@ -63,7 +96,7 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
                 <X className="size-5" />
                 </Dialog.Close>
     
-                <form onSubmit={handleSaveNote} className="flex-1 flex flex-col">
+                <form className="flex-1 flex flex-col">
                     <div className="flex flex-1 flex-col gap-3 p-5">
                         <span className="text-sm font-medium text-slate-300">
                         Adicionar nota
