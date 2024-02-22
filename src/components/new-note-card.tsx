@@ -10,6 +10,7 @@ interface NewNoteProps {
 export function NewNoteCard({onNoteCreated}: NewNoteProps){
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
     const [content, setContent] = useState("");
+    const [isRecording, setIsRecording] = useState(false);
 
     function handleStartEditor() {
         setShouldShowOnboarding(false);
@@ -35,6 +36,11 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
         setShouldShowOnboarding(true);
     
         toast.success("Nota criada com sucesso!");
+    }
+
+    function handleStartRecording() {       
+        setIsRecording(true);
+        setShouldShowOnboarding(false);    
     }
 
     return(
@@ -67,6 +73,7 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
                             <p className="text-sm leading-6 text-slate-400">
                                 Comece{" "}
                                 <button
+                                    onClick={handleStartRecording}
                                     type="button"
                                     className="font-medium text-lime-400 hover:underline"
                                 >
@@ -95,12 +102,23 @@ export function NewNoteCard({onNoteCreated}: NewNoteProps){
 
                     </div>   
 
-                    <button
-                        type="submit"
-                        className="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
-                    >
-                        Salvar nota
-                    </button>         
+                    {isRecording ? (
+                        <button
+                            type="button"
+                            className="w-full flex items-center justify-center gap-2 bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
+                        >
+                            <div className="size-3 rounded-full bg-red-500 animate-pulse" />
+                            Gravando! (clique p/ interromper)
+                        </button>
+                        ) : (
+                        <button
+                            type="button"
+                            onClick={handleSaveNote}
+                            className="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500"
+                        >
+                            Salvar nota
+                        </button>
+                    )}        
                 </form>
 
             </Dialog.Content>
